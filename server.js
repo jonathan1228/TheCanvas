@@ -58,7 +58,7 @@ app.get('/', function(res,req){
 	res.render('index')
 })
 
-
-server.listen(3000, function() {
+var port = Number(process.env.PORT || 8080);
+server.listen(port, function() {
     console.log('listening on port: 3000');
 });
