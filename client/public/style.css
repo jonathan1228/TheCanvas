@@ -11,7 +11,12 @@ li {
 
 /* force scrollbar */
 html { overflow-y: scroll; }
-
+.photo{
+  background-image: url(images/photo4.jpg);
+  background-size: cover;
+  width: 100%;
+  height: 800px;
+}
 /*
 .test{
   background-image: url("images/art2.jpeg");
