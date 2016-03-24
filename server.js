@@ -2,8 +2,8 @@ var express = require('express');
 var app = express();
 var knex = require('./db/knex.js')
 var bodyParser = require('body-parser');
-var http = require('http')
-var server = http.createServer(app);
+// var http = require('http')
+// var server = http.createServer(app);
 var auth = require('./server/controllers/auth.js')
 var media = require('./server/controllers/media.js')
 var favorite = require('./server/controllers/favorite.js')
@@ -59,6 +59,6 @@ app.get('/', function(res,req){
 })
 
 var port = Number(process.env.PORT || 8080);
-server.listen(port, function() {
+app.listen(port, function() {
     console.log('listening on port: 3000');
 });
