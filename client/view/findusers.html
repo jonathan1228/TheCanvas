@@ -1,0 +1,50 @@
+<div class="row">
+	<div class="col-md-12">
+		<div class="col-md-3">
+			<div class="text-center">
+				<h3>{{userInfo.username._content}}</h3>
+				<h5>{{userInfo.realname._content}}</h5>
+				<img src="http://farm{{userInfo.iconfarm}}.staticflickr.com/{{userInfo.iconserver}}/buddyicons/{{userInfo.nsid}}_m.jpg" id="profilePic">
+				<h5><strong>{{userInfo.counts.followed_by}} </strong>Followers</h5>
+				<h5><strong>{{userInfo.counts.follows}}</strong> Following</h5>
+				<h5><strong>{{userInfo.counts.media}}</strong> Posts</h5>
+			</div>		
+		</div>
+		<div class="col-md-7">
+			<canvas id="myChart" ng-show="show"></canvas>
+			<span us-spinner="{radius:30, width:8, length: 16}" spinner-key="spinner-1"></span>
+		</div>
+		<div class="col-md-2 text-center">
+			<nav class="circular-menu">
+			  <div class="circle">
+			    <a href="#media" class="fa fa-home fa-2x"></a>
+			    <a href="" class="fa fa-line-chart" ng-click="show = !show"></a>
+			    <a href="#favorite" class="fa fa-heart fa-2x"></a>
+			    <a href="#tag" class="fa fa-tags fa-2x"></a>
+			    <a href="#finduser" class="fa fa-users fa-2x"></a>
+			    <a href="" class="fa fa-rss fa-2x"></a>
+			    <a href="" class="fa fa-pinterest fa-2x"></a>
+			    <a href="" class="fa fa-asterisk fa-2x"></a>
+			  </div>
+			  <a href="" class="menu-button glyphicon glyphicon-plus"></a>
+			</nav>
+		</div>
+	</div>
+</div>
+
+		<form ng-submit="submit()">
+	<div class="form-group">
+	  	<input type="text" class="form-control" ng-model="search" style="width: 100%"placeholder="Search By Tag" aria-describedby="basic-addon1" name="search">
+	  	<button type="submit" class="btn btn-primary">Search</button>
+	  </div>
+</form>
+  	
+
+	<div class="grid">
+		<div class="grid-sizer"></div>
+	  	<div class="grid-item wow bounceIn" ng-repeat="p in pics"><img ng-src="https://farm{{p.farm}}.staticflickr.com/{{p.server}}/{{p.id}}_{{p.secret}}_n.jpg"></div>
+	  	<button ng-click="more()" type="button" class="btn btn-success">More</button>
+	</div>
+	
+
+
