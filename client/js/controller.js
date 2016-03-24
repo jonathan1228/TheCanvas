@@ -91,8 +91,7 @@ app.controller("TagController", function($scope,$http,flickr){
 	$scope.count=1;
 	$scope.grid = $('.grid').masonry({
 		  itemSelector: '.grid-item',
-		  percentPosition: true,
-		  columnWidth: '.grid-sizer'
+		  percentPosition: true
 		});
 		// layout Isotope after each image loads
 		$scope.grid = $('.grid').imagesLoaded( function() {

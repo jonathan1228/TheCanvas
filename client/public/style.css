@@ -43,14 +43,13 @@ html { overflow-y: scroll; }
   margin: 0 auto;
 }
 
-/* clear fix */
 .grid:after {
   content: '';
   display: block;
   clear: both;
 }
 
-/* ---- .grid-item ---- */
+
 
 .grid-sizer,
 .grid-item {
