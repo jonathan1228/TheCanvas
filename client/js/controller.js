@@ -167,13 +167,6 @@ app.controller("TagController", function($scope,$http,flickr){
 				$scope.loadPics.push(morePic)
 			}
 			Promise.all($scope.loadPics).then(function(responses){
-				$scope.grid = $('.grid').isotope({
-				    itemSelector: '.grid-item',
-				    percentPosition: true,
-				    masonry: {
-				      columnWidth: '.grid-sizer'
-				    }
-				});
 				  // layout Isotope after each image loads
 				 $scope.grid.imagesLoaded().progress( function() {
 				    $scope.grid.isotope('layout');
