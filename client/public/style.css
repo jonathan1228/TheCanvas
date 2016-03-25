@@ -223,6 +223,9 @@ html { overflow-y: scroll; }
 .tagPics{
   border-radius: 10px;
 }
+.working{
+  color: #82A2D4 !important;
+}
 
 
 
