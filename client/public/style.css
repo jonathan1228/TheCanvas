@@ -11,6 +11,7 @@ li {
 
 /* force scrollbar */
 html { overflow-y: scroll; }
+
 .photo{
   background-image: url(images/photo4.jpg);
   background-size: cover;
@@ -198,3 +199,26 @@ html { overflow-y: scroll; }
 	color:white;
 	font-size: 30px;
 }
+
+.title{
+  padding-top: 10%;
+}
+.description{
+  color: #82A2D4;
+
+}
+.share{
+  background: rgba(0,0,0,0.5);
+  color: white;
+  font-size: 18px;
+  margin-left: 10px;
+  margin-right: 10px;
+  width: 30%;
+}
+
+
+
+
+
+
+
