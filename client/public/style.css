@@ -220,6 +220,9 @@ html { overflow-y: scroll; }
   margin-bottom: 20px;
   width:75vw;
 }
+.tagPics{
+  border-radius: 10px;
+}
 
 
 
