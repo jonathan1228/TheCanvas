@@ -1,7 +1,8 @@
-<div class="row test">
+<div class="container-fluid">
+	<div class="row test">
 	
-		<div class="col-md-10">
-		<img src="/public/images/art.jpeg" style="opacity:.6"width="100%" height="300">
+		<div class="col-md-10 tagPhoto">
+		<img class="img-rounded" src="/public/images/photo5.jpeg" width="100%" height="300">
 		</div>
 
 		<div class="col-md-2 text-center test2">
@@ -22,21 +23,34 @@
 	
 	
 </div>
-<form ng-submit="submit()">
+<div class="row">
+	<div class="col-md-12">
+		<form ng-submit="submit()">
 	<div class="form-group">
 	  	<input type="text" class="form-control" ng-model="tag" style="width: 100%"placeholder="Search By Tag" aria-describedby="basic-addon1" name="tag">
+	  	<br>
 	  	<button type="submit" class="btn btn-primary">Search</button>
 	  </div>
 </form>
-  	
 
+	</div>
+</div>
+
+  	
+<div class="row">
 	<div class="grid">
 		<div class="grid-sizer"></div>
-	  	<div class="grid-item wow bounceIn" ng-repeat="p in pics | filter: search"><img ng-src="https://farm{{p.farm}}.staticflickr.com/{{p.server}}/{{p.id}}_{{p.secret}}_n.jpg"></div>
+	  	<div class="grid-item wow bounceIn" ng-repeat="p in pics | filter: search">
+	  		<img class="img-rounded" ng-src="https://farm{{p.farm}}.staticflickr.com/{{p.server}}/{{p.id}}_{{p.secret}}_n.jpg">
+	  	</div>
 	</div>
-	<div class="row">
+</div>
+	
+	<div class="row text-center">
 		<button ng-click="more()" type="button" class="btn btn-success">More</button>
 	</div>
+</div>
+
 
 
 

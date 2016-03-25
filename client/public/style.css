@@ -215,7 +215,11 @@ html { overflow-y: scroll; }
   margin-right: 10px;
   width: 30%;
 }
-
+.tagPhoto{
+  margin-left: 10px;
+  margin-bottom: 20px;
+  width:75vw;
+}
 
 
 
