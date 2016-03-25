@@ -36,7 +36,22 @@ app.controller('MediaController', function($scope, $http, flickr){
 			flickr.getPhoto(function(data){
 				$scope.pics = data;
 				console.log(data)
-				
+				new Promise(function(resolve, reject){
+					resolve(data)
+				}).then(function(responses){
+					$scope.grid = $('.grid').isotope({
+				    itemSelector: '.grid-item',
+				    percentPosition: true,
+				    masonry: {
+				      columnWidth: '.grid-sizer'
+				    }
+				});
+				  // layout Isotope after each image loads
+				 $scope.grid.imagesLoaded().progress( function() {
+				    $scope.grid.isotope('layout');
+
+				});
+				})
 			});
 		})	
 })
