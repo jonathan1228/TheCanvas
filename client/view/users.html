@@ -27,7 +27,7 @@
 		<div class="form-group">
 		  	<input type="text" class="form-control" ng-model="tag" style="width: 100%"placeholder="Search By Tag" aria-describedby="basic-addon1" name="tag">
 		  	<br>
-		  	<button type="submit" class="btn btn-primary">Search</button>
+		  	<button type="submit" class="btn btn-primary">Search <span us-spinner="{radius:30, width:8, length: 16}" spinner-key="spinner-1"></span></button>
 		  </div>
 	</form>
 
@@ -41,11 +41,12 @@
 		  	<div class="grid-item wow bounceIn" ng-repeat="p in pics | filter: search">
 		  		<img class="tagPics" ng-src="https://farm{{p.farm}}.staticflickr.com/{{p.server}}/{{p.id}}_{{p.secret}}_n.jpg">
 		  	</div>
+
 		</div>
 	</div>
 	
 	<div class="row text-center">
-		<button ng-click="more()" type="button" class="btn btn-success">More</button>
+		<button ng-click="more()" type="button" class="btn btn-success">More </button>
 	</div>
 </div>
 

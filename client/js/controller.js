@@ -100,11 +100,31 @@ app.controller('FavoriteController', function($scope, $http, flickr){
 })
 
 
-app.controller("TagController", function($scope,$http,flickr){	
+app.controller("TagController", function($scope,$rootScope,$http,flickr,usSpinnerService){	
 	$scope.tag;
 	$scope.pics;
 	$scope.count=1;
+	$scope.startSpin = function() {
+      if (!$scope.spinneractive) {
+        usSpinnerService.spin('spinner-1');
+      }
+    };
 
+    $scope.stopSpin = function() {
+      if ($scope.spinneractive) {
+        usSpinnerService.stop('spinner-1');
+      }
+    };
+    $scope.spinneractive = false;
+
+    $rootScope.$on('us-spinner:spin', function(event, key) {
+      $scope.spinneractive = true;
+    });
+
+    $rootScope.$on('us-spinner:stop', function(event, key) {
+      $scope.spinneractive = false;
+    });
+	  
 
 
 	document.querySelector('.menu-button').onclick = function(e) {
@@ -117,6 +137,9 @@ app.controller("TagController", function($scope,$http,flickr){
 	  items[i].style.top = (50 + 35*Math.sin(-0.5 * Math.PI - 2*(1/l)*i*Math.PI)).toFixed(4) + "%";
 	}
 	$scope.submit = function(){
+		
+		$scope.startSpin();
+
 		if ($('.wow').hasClass('animated')) {
             $(this).removeClass('animated');
             $(this).removeAttr('style');
@@ -149,14 +172,17 @@ app.controller("TagController", function($scope,$http,flickr){
 				 $scope.grid.imagesLoaded().progress( function() {
 				    $scope.grid.isotope('layout');
 
-				});  
+				});
+				$scope.stopSpin()  
 			})
 			
 		})
 	}
 	$scope.more = function(){
+		$scope.startSpin();
 		var tmpPics = [];
 		//add $scope.pics to tempPics
+		tmpPics = $scope.pics;
 		$scope.loadPics = [];
 		$scope.count++;
 		flickr.getTagPhotos($scope.tag, $scope.count, function(data){
@@ -170,21 +196,22 @@ app.controller("TagController", function($scope,$http,flickr){
 				$scope.loadPics.push(morePic)
 			}
 			// Now $scope.pics = tempPics;
-			$scope.pics = tmpPics
+			$scope.pics = tmpPics;
 			Promise.all($scope.loadPics).then(function(responses){
 				  // layout Isotope after each image loads
-				 $scope.grid = $('.grid').isotope({
+				  $scope.grid = $('.grid').isotope({
 				    itemSelector: '.grid-item',
 				    percentPosition: true,
 				    masonry: {
 				      columnWidth: '.grid-sizer'
 				    }
 				});
-				  // layout Isotope after each image loads
 				 $scope.grid.imagesLoaded().progress( function() {
 				    $scope.grid.isotope('reloadItems');
 
-				}); ;
+
+				});
+				 $scope.stopSpin();
 			})
 
 		})
