@@ -89,20 +89,8 @@ app.controller("TagController", function($scope,$http,flickr){
 	$scope.tag;
 	$scope.pics;
 	$scope.count=1;
-	$scope.grid = $('.grid').masonry({
-		  itemSelector: '.grid-item',
-		  percentPosition: true
-		});
-		// layout Isotope after each image loads
-		$scope.grid = $('.grid').imagesLoaded( function() {
-		  $scope.grid.masonry({
-		    itemSelector: '.grid-item',
-		    percentPosition: true
-		  }); 
-		});
-		$scope.grid.imagesLoaded().progress( function() {
-		  $scope.grid.masonry();
-		});  
+
+
 
 	document.querySelector('.menu-button').onclick = function(e) {
 	   e.preventDefault(); document.querySelector('.circle').classList.toggle('open');
@@ -119,26 +107,65 @@ app.controller("TagController", function($scope,$http,flickr){
             $(this).removeAttr('style');
             new WOW().init();
 		}
-		
+		else
 			new WOW().init();
-	
+		$scope.loadPics = [];
 		$scope.pics = [];
 		$scope.count=1;
 		flickr.getTagPhotos($scope.tag, $scope.count, function(data){
-			console.log(data)
+
 			for(var i = 0; i < data.photo.length; i++){
-				$scope.pics.push(data.photo[i]);
+				var picPromise = new Promise(function(resolve,reject){
+					resolve(data.photo[i])
+				})
+				$scope.pics.push(data.photo[i])
+				$scope.loadPics.push(picPromise);
 			}
+			Promise.all($scope.loadPics).then(function(responses){
+				// console.log($scope.loadPics)
+				$scope.grid = $('.grid').isotope({
+				    itemSelector: '.grid-item',
+				    percentPosition: true,
+				    masonry: {
+				      columnWidth: '.grid-sizer'
+				    }
+				});
+				  // layout Isotope after each image loads
+				 $scope.grid.imagesLoaded().progress( function() {
+				    $scope.grid.isotope('layout');
+
+				});  
+			})
 			
 		})
 	}
 	$scope.more = function(){
+		$scope.loadPics = [];
 		$scope.count++;
 		flickr.getTagPhotos($scope.tag, $scope.count, function(data){
 			console.log(data)
 			for(var i = 0; i < data.photo.length; i++){
+				var morePic = new Promise(function(resolve, reject){
+					resolve(data.photo[i]);
+				})
 				$scope.pics.push(data.photo[i]);
+				$scope.loadPics.push(morePic)
 			}
+			Promise.all($scope.loadPics).then(function(responses){
+				$scope.grid = $('.grid').isotope({
+				    itemSelector: '.grid-item',
+				    percentPosition: true,
+				    masonry: {
+				      columnWidth: '.grid-sizer'
+				    }
+				});
+				  // layout Isotope after each image loads
+				 $scope.grid.imagesLoaded().progress( function() {
+				    $scope.grid.isotope('layout');
+
+				});
+			})
+
 		})
 	}
 		
@@ -178,22 +205,9 @@ app.controller("FindUserController", function($scope,$rootScope, $http, flickr, 
       $scope.spinneractive = false;
     });
 	  
-	$scope.grid = $('.grid').masonry({
-		  itemSelector: '.grid-item',
-		  percentPosition: true,
-		  columnWidth: '.grid-sizer'
-		});
-		// layout Isotope after each image loads
-		$scope.grid = $('.grid').imagesLoaded( function() {
-		  $scope.grid.masonry({
-		    itemSelector: '.grid-item',
-		    percentPosition: true,
-		    columnWidth: '.grid-sizer'
-		  }); 
-		});
-		$scope.grid.imagesLoaded().progress( function() {
-		  $scope.grid.masonry();
-		});  
+	
+
+
 
 	document.querySelector('.menu-button').onclick = function(e) {
 	   e.preventDefault(); document.querySelector('.circle').classList.toggle('open');
@@ -222,7 +236,7 @@ app.controller("FindUserController", function($scope,$rootScope, $http, flickr, 
             $(this).removeAttr('style');
             new WOW().init();
 		}
-		
+		else
 			new WOW().init();
 
 		$scope.ctx = $("#myChart").get(0).getContext("2d");
@@ -240,9 +254,6 @@ app.controller("FindUserController", function($scope,$rootScope, $http, flickr, 
 				var time = [];
 					var fav = [];
 				for(var i = 0; i < $scope.pics.length; i++){
-					flickr.getChartTime($scope.pics[i].id, function(data){
-						// console.log(data)
-					})
 					// Time Promise Generation
 					var p1 = new Promise(function(resolve, reject) {
 						flickr.getChartTime($scope.pics[i].id, generatePromiseCB(resolve, reject, i));
@@ -276,6 +287,7 @@ app.controller("FindUserController", function($scope,$rootScope, $http, flickr, 
 					        ctx.textBaseline = "bottom";
 					        ctx.fillStyle = this.options.scaleFontColor;
 					        // position
+					        // console.log(this.scale.xScalePaddingLeft)
 					        var x = this.scale.xScalePaddingLeft * 0.4;
 					        var y = this.chart.height / 2;
 					        // change origin
@@ -306,7 +318,7 @@ app.controller("FindUserController", function($scope,$rootScope, $http, flickr, 
 						var monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December",]
 			
 						//converts millisecond to month and year
-						for(var i = 0; i < $scope.chartTime.length; i++){	
+						for(var i = $scope.chartTime.length-1; i > 0; i--){	
 							var d = new Date(parseInt($scope.chartTime[i].data.photo.dateuploaded) * 1000)
 							var year = d.getFullYear();
 							var month = d.getMonth()
@@ -334,6 +346,19 @@ app.controller("FindUserController", function($scope,$rootScope, $http, flickr, 
 						    scaleLabel: "<%=value%>"
 						});
 						$scope.stopSpin()
+						$scope.grid = $('.grid').isotope({
+						    itemSelector: '.grid-item',
+						    percentPosition: true,
+						    masonry: {
+						      columnWidth: '.grid-sizer'
+						    }
+						});
+						  // layout Isotope after each image loads
+						 $scope.grid.imagesLoaded().progress( function() {
+						    $scope.grid.isotope('layout');
+
+						});  
+
 						
 					})
 					
