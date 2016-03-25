@@ -155,23 +155,36 @@ app.controller("TagController", function($scope,$http,flickr){
 		})
 	}
 	$scope.more = function(){
+		var tmpPics = [];
+		//add $scope.pics to tempPics
 		$scope.loadPics = [];
 		$scope.count++;
 		flickr.getTagPhotos($scope.tag, $scope.count, function(data){
 			console.log(data)
 			for(var i = 0; i < data.photo.length; i++){
+				// Add the new pic data to tmpPics
 				var morePic = new Promise(function(resolve, reject){
 					resolve(data.photo[i]);
 				})
-				$scope.pics.push(data.photo[i]);
+				tmpPics.push(data.photo[i]);
 				$scope.loadPics.push(morePic)
 			}
+			// Now $scope.pics = tempPics;
+			$scope.pics = tmpPics
 			Promise.all($scope.loadPics).then(function(responses){
 				  // layout Isotope after each image loads
-				 $scope.grid.imagesLoaded().progress( function() {
-				    $scope.grid.isotope('layout');
-
+				 $scope.grid = $('.grid').isotope({
+				    itemSelector: '.grid-item',
+				    percentPosition: true,
+				    masonry: {
+				      columnWidth: '.grid-sizer'
+				    }
 				});
+				  // layout Isotope after each image loads
+				 $scope.grid.imagesLoaded().progress( function() {
+				    $scope.grid.isotope('reloadItems');
+
+				}); ;
 			})
 
 		})
