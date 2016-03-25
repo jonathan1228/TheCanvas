@@ -150,7 +150,7 @@ app.controller("TagController", function($scope,$rootScope,$http,flickr,usSpinne
 		$scope.loadPics = [];
 		$scope.pics = [];
 		$scope.count=1;
-		flickr.getTagPhotos($scope.tag, $scope.count, function(data){
+		flickr.getTagPhotos($scope.tag, $scope.count, 50, function(data){
 
 			for(var i = 0; i < data.photo.length; i++){
 				var picPromise = new Promise(function(resolve,reject){
@@ -179,13 +179,13 @@ app.controller("TagController", function($scope,$rootScope,$http,flickr,usSpinne
 		})
 	}
 	$scope.more = function(){
-		$scope.startSpin();
+		
 		var tmpPics = [];
 		//add $scope.pics to tempPics
 		tmpPics = $scope.pics;
 		$scope.loadPics = [];
 		$scope.count++;
-		flickr.getTagPhotos($scope.tag, $scope.count, function(data){
+		flickr.getTagPhotos($scope.tag, $scope.count, 20,function(data){
 			console.log(data)
 			for(var i = 0; i < data.photo.length; i++){
 				// Add the new pic data to tmpPics
@@ -211,7 +211,7 @@ app.controller("TagController", function($scope,$rootScope,$http,flickr,usSpinne
 
 
 				});
-				 $scope.stopSpin();
+				 
 			})
 
 		})

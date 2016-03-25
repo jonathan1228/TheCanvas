@@ -36,10 +36,10 @@ app.factory('flickr', ['$http', function($http){
 			callback(response.data.person)
 		})
 	},
-	getTagPhotos: function(tag, count, callback){
+	getTagPhotos: function(tag, count, perPage, callback){
 		$http({
 			method:"GET",
-			url: "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key="+api_key+"&tags="+tag+"&page="+count+"&format=json&nojsoncallback=1"
+			url: "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key="+api_key+"&tags="+tag+"&page="+count+"&per_page="+perPage+"&format=json&nojsoncallback=1"
 		}).then(function successCallback(response){
 			callback(response.data.photos)
 		})
