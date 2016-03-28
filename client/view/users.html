@@ -10,7 +10,7 @@
 			  <div class="circle">
 			    <a href="#media" class="fa fa-home fa-2x working"></a>
 			    <a href="" class="fa fa-line-chart" ng-click="show = !show"></a>
-			    <a href="" class="fa fa-heart fa-2x"></a>
+			    <a href="#favorites" class="fa fa-heart fa-2x working"></a>
 			    <a href="#tag" class="fa fa-tags fa-2x working"></a>
 			   	<a href="#finduser" class="fa fa-users fa-2x working"></a>
 			    <a href="" class="fa fa-rss fa-2x"></a>
@@ -39,6 +39,10 @@
 		<div class="grid">
 			<div class="grid-sizer"></div>
 		  	<div class="grid-item wow bounceIn" ng-repeat="p in pics | filter: search">
+		  	<select class="selectpicker" ng-model="pic.toUser" ng-change="share(p.id, pic.toUser)">
+		  	<option>None</option>
+		  	<option ng-repeat="users in users" value={{users.userid}}>{{users.fullname}}</option>
+			</select>
 		  		<img class="tagPics" ng-src="https://farm{{p.farm}}.staticflickr.com/{{p.server}}/{{p.id}}_{{p.secret}}_n.jpg">
 		  	</div>
 

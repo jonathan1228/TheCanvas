@@ -2,15 +2,16 @@ var express = require('express');
 var router = express.Router();
 var knex = require('../../db/knex.js')
 
-router.post('/add',function(req,res){
-	console.log(req.body)
+router.post('/share',function(req,res){
+	// console.log(req.body)
 	knex('favorites').where({
-		favoriteid: req.body.imgid
+		favoriteid: req.body.pic
 	}).then(function(data){
 		if(data.length === 0){
 			knex('favorites').insert({
-				userid: req.body.userid,
-				favoriteid: req.body.imgid
+				userid: req.body.user,
+				favoriteid: req.body.pic,
+				senderid: req.body.sender
 				}).then(function(data){
 					console.log("favorite added")
 			})
@@ -21,14 +22,22 @@ router.post('/add',function(req,res){
 	})
 })
 router.post('/delete', function(req,res){
-	knex('favorites').where({favoriteid: req.body.imgid}).del().then(function(){
+	console.log(req.body)
+	knex('favorites').where({favoriteid: req.body.picid, userid: req.body.userid}).del().then(function(){
 
 	})
-	console.log(req.body.imgid)
+	
 })
 router.get('/get', function(req,res){
+	var favData = {};
 	knex('favorites').then(function(data){
-		res.json({data: data});
+		favData.picData = data;
+		knex('users').then(function(data){
+			favData.userData = data
+			console.log(favData)
+			res.json({data: favData});
+		})
+		
 	})
 })
 router.get('/', function(req,res){

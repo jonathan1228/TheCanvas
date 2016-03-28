@@ -1,53 +1,51 @@
-<div class="row">
-	<div class="col-md-12 well">
-		<div class="col-md-3">
-			<div class="thumbnail well text-center">
-				<h3>{{userInfo.username}}</h3>
-				<h5>{{userInfo.full_name}}</h5>
-				<img src="{{userInfo.profile_picture}}" id="profilePic">
-				<h5><strong>{{userInfo.counts.followed_by}} </strong>Followers</h5>
-				<h5><strong>{{userInfo.counts.follows}}</strong> Following</h5>
-				<h5><strong>{{userInfo.counts.media}}</strong> Posts</h5>
-			</div>		
+<div class="container-fluid">
+	<div class="row test">
+	
+		<div class="col-md-10 tagPhoto">
+		<img class="img-rounded" src="/public/images/mosaic.jpeg" width="100%" height="500">
 		</div>
-		<div class="col-md-7">
-			<canvas id="myChart" ng-show="show"></canvas>
-		</div>
+
 		<div class="col-md-2 text-center test2">
+		<p class="textMosaicSm"> Photos Users Shared With You.</p>
 			<nav class="circular-menu">
 			  <div class="circle">
-			    <a href="#media" class="fa fa-home fa-2x"></a>
+			    <a href="#media" class="fa fa-home fa-2x working"></a>
 			    <a href="" class="fa fa-line-chart" ng-click="show = !show"></a>
-			    <a href="#favorite" class="fa fa-heart fa-2x"></a>
-			    <a href="#tag" class="fa fa-tags fa-2x"></a>
-			   	<a href="#finduser" class="fa fa-users fa-2x"></a>
+			    <a href="#favorites" class="fa fa-heart fa-2x working"></a>
+			    <a href="#tag" class="fa fa-tags fa-2x working"></a>
+			   	<a href="#finduser" class="fa fa-users fa-2x working"></a>
 			    <a href="" class="fa fa-rss fa-2x"></a>
 			    <a href="" class="fa fa-pinterest fa-2x"></a>
 			    <a href="" class="fa fa-asterisk fa-2x"></a>
 			  </div>
 			  <a href="" class="menu-button glyphicon glyphicon-plus"></a>
+			  <p class="textMosaicLg"> Your Mosaic. </p>
 			</nav>
-		</div>
-		<div class="row"></div>
-		<div class="input-group">
-		  	<span class="input-group-addon" id="basic-addon1">#</span>
-		  	<input type="text" class="form-control" ng-model="search" style="width: 100%"placeholder="Search By Tag" aria-describedby="basic-addon1">
+
+		</div>	
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="row">
+				<div class="input-group">
+				  	<span class="input-group-addon" id="basic-addon1">#</span>
+				  	<input type="text" class="form-control" ng-model="search" style="width: 100%"placeholder="Search By Tag" aria-describedby="basic-addon1">
+				</div>
+			</div>
 		</div>
 	</div>
-	
+	<br><br><br>
+		<div class="row">
+			<div class="grid">
+				<div class="grid-sizer"></div>
+			  	<div class="grid-item" ng-repeat="p in pics | filter: search">
+			  	<button type="button" class="btn btn-danger remove" ng-click="remove(p.id, p.userid)">Remove</button>
+			  	<p class="sender well">Sent by: {{p.senderName}}</p>
+	  			<img class="tagPics" ng-src="https://farm{{p.farm}}.staticflickr.com/{{p.server}}/{{p.id}}_{{p.secret}}_n.jpg">
+	  			</div>
+			</div>
+		</div>
 </div>
-<div class="row">
-	<ul class="col-md-12">
-        <li ng-repeat="p in pics | filter: search" class = "col-md-4">
-               <div class="thumbnail imgWrap">
-               <div class="test">
-               	<a href="{{p.link}}"><img ng-src="{{p.images.standard_resolution.url}}" class = "test img-responsive"/>
-               	<p class="favorite" style="font-size: 20px"><a href="" ng-click="deleteFavorite(p.id)" class="favoriteColor"><span class="fa fa-star">Remove Favorite</span></a></p>
-               	<p class="imgDescription" style="font-size: 20px"><span class="glyphicon glyphicon-heart">  {{p.likes.count}}</span>&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-comment">  {{p.comments.count}}</span></p></a>
-               </div>
-                  
-               </div>       
-        </li>
-	</ul>
-</div>	
-<br><br><br><br>
+
+
+

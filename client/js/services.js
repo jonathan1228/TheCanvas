@@ -4,6 +4,9 @@ app.factory('flickr', ['$http', function($http){
 	var api_key = "0e437bfe1461cc90165d2991f57bc5de";
 	var url ="https://api.instagram.com/v1/users/self/media/recent/?callback=JSON_CALLBACK&access_token=";
 	return {
+	currentUser: function(){
+		return user_id;
+	},
 	userid: function(callback){
 		$http.get('/media/pics').then(function successCallback(response) {
 			token = response.data.user.token
@@ -13,6 +16,14 @@ app.factory('flickr', ['$http', function($http){
 		  }, function errorCallback(response) {
 
  	 	});
+	},
+	getFavPhoto: function(picID, callback){
+		$http({
+			method:"GET",
+			url: "https://api.flickr.com/services/rest/?method=flickr.photos.getInfo&api_key="+api_key+ "&photo_id="+picID+"&format=json&nojsoncallback=1"
+		}).then(function(response){
+			callback(response.data.photo);
+		})
 	},
 	getPhoto: function(callback){
 		$http({
@@ -51,6 +62,15 @@ app.factory('flickr', ['$http', function($http){
 		}).then(function successCallback(response){
 			user_id = response.data.user.id
 			callback(response.data)
+		})
+	},
+	getUsers: function(callback){
+		$http({
+			method:"GET",
+			url: "/favorite/get"
+		}).then(function(response){
+			console.log(response)
+			callback(response.data.data)
 		})
 	},
 	getChartTime: function(picID, callback){
@@ -112,12 +132,13 @@ app.factory('flickr', ['$http', function($http){
 				callback(response.data.data)
 			})
 		},
-	deleteFavorite: function(id, userid){
+	deleteFavorite: function(picid, userid){
+		console.log(picid, userid)
 	$http({
 		method:"POST",
 		url:"/favorite/delete",
 		data:{ 
-			imgid: id,
+			picid: picid,
 			userid: userid
 		 }
 		}).then(function(data){

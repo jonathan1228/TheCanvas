@@ -9,7 +9,7 @@ app.config(function($routeProvider,$locationProvider){
 		templateUrl: "./view/media.html",
 		controller: "MediaController"
 	})
-	.when("/favorite",{
+	.when("/favorites",{
 		templateUrl: "./view/favorite.html",
 		controller: "FavoriteController"
 	})

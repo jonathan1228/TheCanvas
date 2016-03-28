@@ -38,11 +38,19 @@ passport.deserializeUser(function(obj, done) {
  passport.use(new FlickrStrategy({
     consumerKey: process.env['FLICKR_API_KEY'],
     consumerSecret: process.env['FLICKR_SECRET_KEY'],
-    callbackURL: "http://thecanvas.herokuapp.com/auth/flickr/callback",
+    callbackURL: process.env['HOST']+"/auth/flickr/callback",
   },
   function(token, tokenSecret, profile, done) {
-   console.log ( token, profile, tokenSecret)
-    return done(null, {token:token, profile:profile, tokenSecret: tokenSecret});
+   
+   knex('users').where({userid: profile.id}).then(function(data){
+    if(data.length === 0){
+      knex('users').insert({userid: profile.id, fullname: profile.fullName, username: profile.displayName}).then(function(data){
+        console.log(data);
+        return done(null, {token:token, profile:profile, tokenSecret: tokenSecret});
+      })
+    }
+   })
+    
   }
 ));
 

@@ -68,34 +68,94 @@ app.controller('FavoriteController', function($scope, $http, flickr){
 	  items[i].style.left = (50 - 35*Math.cos(-0.5 * Math.PI - 2*(1/l)*i*Math.PI)).toFixed(4) + "%";
 	  items[i].style.top = (50 + 35*Math.sin(-0.5 * Math.PI - 2*(1/l)*i*Math.PI)).toFixed(4) + "%";
 	}
-	flickr.getFavorite(function(dataPic){
-		console.log(dataPic)
-		flickr.userid(function(data){
-		$scope.userInfo = data.profile._json.data
-		console.log($scope.userInfo)
-		flickr.media(function(data){
-			console.log(data)
-			for(var j = 0; j < dataPic.length; j++){
-				for(var i = 0; i < data.length; i++){
-					if(dataPic[j].favoriteid === data[i].id){
-						$scope.pics.push(data[i])
-					}
+	
+	$scope.remove = function(pic, id){
+		console.log($scope.pics)
+		var tmpPics = []
+		for(var i = 0; i < $scope.pics.length; i++){
+				if($scope.pics[i].id === pic){
+					console.log($scope.pics)
+					$scope.pics.splice(i,1)
+					console.log($scope.pics)
+
 				}
+				tmpPics.push($scope.pics[i])
+
 			}
-			console.log($scope.pics)
+			$scope.pics = [];
+			$scope.pics = tmpPics
+		$http({
+			method:"POST",
+			url:"favorite/delete",
+			data:{picid: pic, userid: id}
+		}).then(function(){
+			$scope.grid = $('.grid').isotope({
+				    itemSelector: '.grid-item',
+				    percentPosition: true,
+				    masonry: {
+				      columnWidth: '.grid-sizer'
+				    }
+				});
+				 $scope.grid.imagesLoaded().progress(function() {
+				    $scope.grid.isotope('reloadItems');
+
+
+				});
+		})
+	}
+	flickr.getFavorite(function(data){
+		var shared=[];
+		var test = [];
+		console.log(data);
+		var picData = data.picData;
+		var userData = data.userData;
+		for(var i = 0; i < picData.length; i++){
+			var promisePic = new Promise(function(resolve, reject){
+				var userid = picData[i].userid 
+				flickr.getFavPhoto(picData[i].favoriteid, function(data){
+					for(var j = 0; j < userData.length; j++){
+						if(userid === userData[j].userid){
+							data.userid = userData[j].userid
+							data.senderName = userData[j].fullname
+						}
+					}
+					data.userid
+					console.log(data)
+					test.push(data)
+					resolve(data)
+
+				})
+			})
 			
+			shared.push(promisePic);
+		}
+		$scope.pics = test;
+		Promise.all(shared).then(function(data){
+			
+			$scope.grid = $('.grid').isotope({
+						    itemSelector: '.grid-item',
+						    percentPosition: true,
+						    masonry: {
+						      columnWidth: '.grid-sizer'
+						    }
+						});
+						  // layout Isotope after each image loads
+			 $scope.grid.imagesLoaded().progress( function() {
+			    $scope.grid.isotope('layout');
+
+			});  
+			console.log(data)
 		})
 	})
-	})
-	$scope.deleteFavorite = function(id){
-		flickr.deleteFavorite(id, $scope.userInfo.id)
-		for(var i = 0; i < $scope.pics.length; i++){
-			if($scope.pics[i].id === id){
-				$scope.pics.splice(i,1)
-			}
-		}
-		console.log($scope.pics)
-	}
+	// $scope.deleteFavorite = function(id){
+	// 	flickr.deleteFavorite(id, $scope.userInfo.id)
+	// 	for(var i = 0; i < $scope.pics.length; i++){
+	// 		if($scope.pics[i].id === id){
+	// 			$scope.pics.splice(i,1)
+	// 		}
+	// 	}
+	// 	console.log($scope.pics)
+	// }
 		
 })
 
@@ -104,6 +164,12 @@ app.controller("TagController", function($scope,$rootScope,$http,flickr,usSpinne
 	$scope.tag;
 	$scope.pics;
 	$scope.count=1;
+	$scope.pic={}
+	$scope.users;
+	flickr.userid(function(data){
+		
+	})
+	
 	$scope.startSpin = function() {
       if (!$scope.spinneractive) {
         usSpinnerService.spin('spinner-1');
@@ -136,6 +202,24 @@ app.controller("TagController", function($scope,$rootScope,$http,flickr,usSpinne
 	  items[i].style.left = (50 - 35*Math.cos(-0.5 * Math.PI - 2*(1/l)*i*Math.PI)).toFixed(4) + "%";
 	  items[i].style.top = (50 + 35*Math.sin(-0.5 * Math.PI - 2*(1/l)*i*Math.PI)).toFixed(4) + "%";
 	}
+	$scope.share = function(picId, senderID){
+
+		if(senderID !== "None"){
+			console.log(flickr.currentUser());
+			$http({
+				method:"POST",
+				url:"favorite/share",
+				data: {pic: picId, sender: senderID, user: flickr.currentUser()}
+			}).then(function(){
+
+			})
+			console.log(picId, senderID)
+		}
+		else{
+			console.log("Nothing selected")
+		}
+		
+	}
 	$scope.submit = function(){
 		
 		$scope.startSpin();
@@ -150,6 +234,10 @@ app.controller("TagController", function($scope,$rootScope,$http,flickr,usSpinne
 		$scope.loadPics = [];
 		$scope.pics = [];
 		$scope.count=1;
+		flickr.getUsers(function(data){
+			console.log(data)
+			$scope.users = data.userData;
+		})
 		flickr.getTagPhotos($scope.tag, $scope.count, 50, function(data){
 
 			for(var i = 0; i < data.photo.length; i++){
@@ -416,7 +504,12 @@ app.controller("FindUserController", function($scope,$rootScope, $http, flickr, 
 	}
 
 })
-
+function generateUserIDPromise(resolve, reject, userID){
+	return function(data){
+		data.userid = userID;
+		resolve(data)
+	}
+}
 function generatePromiseCB(resolve, reject, additionalData) {
 	return function(data) {
 		data.additionalData = additionalData
