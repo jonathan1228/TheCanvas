@@ -38,7 +38,7 @@ passport.deserializeUser(function(obj, done) {
  passport.use(new FlickrStrategy({
     consumerKey: process.env['FLICKR_API_KEY'],
     consumerSecret: process.env['FLICKR_SECRET_KEY'],
-    callbackURL: process.env['HOST'] + "/auth/flickr/callback",
+    callbackURL: "http://thecanvas.herokuapp.com/auth/flickr/callback",
   },
   function(token, tokenSecret, profile, done) {
    
