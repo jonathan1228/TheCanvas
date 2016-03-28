@@ -74,14 +74,14 @@ app.controller('FavoriteController', function($scope, $http, flickr){
 		var tmpPics = []
 		for(var i = 0; i < $scope.pics.length; i++){
 				if($scope.pics[i].id === pic){
-					console.log($scope.pics)
+					
 					$scope.pics.splice(i,1)
-					console.log($scope.pics)
+					
 
 				}
-				tmpPics.push($scope.pics[i])
 
 			}
+			tmpPics = $scope.pics
 			$scope.pics = [];
 			$scope.pics = tmpPics
 		$http({
