@@ -40,7 +40,6 @@
 			<div class="grid-sizer"></div>
 		  	<div class="grid-item wow bounceIn" ng-repeat="p in pics | filter: search">
 		  	<select class="selectpicker" ng-model="pic.toUser" ng-change="share(p.id, pic.toUser)">
-		  	<option>None</option>
 		  	<option ng-repeat="users in users" value={{users.userid}}>{{users.fullname}}</option>
 			</select>
 		  		<img class="tagPics" ng-src="https://farm{{p.farm}}.staticflickr.com/{{p.server}}/{{p.id}}_{{p.secret}}_n.jpg">

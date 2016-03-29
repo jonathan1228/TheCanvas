@@ -203,7 +203,7 @@ app.controller("TagController", function($scope,$rootScope,$http,flickr,usSpinne
 	  items[i].style.top = (50 + 35*Math.sin(-0.5 * Math.PI - 2*(1/l)*i*Math.PI)).toFixed(4) + "%";
 	}
 	$scope.share = function(picId, senderID){
-
+		$scope.pic.toUser = ""
 		if(senderID !== "None"){
 			console.log(flickr.currentUser());
 			$http({
@@ -273,7 +273,7 @@ app.controller("TagController", function($scope,$rootScope,$http,flickr,usSpinne
 		tmpPics = $scope.pics;
 		$scope.loadPics = [];
 		$scope.count++;
-		flickr.getTagPhotos($scope.tag, $scope.count, 20,function(data){
+		flickr.getTagPhotos($scope.tag, $scope.count, 10,function(data){
 			console.log(data)
 			for(var i = 0; i < data.photo.length; i++){
 				// Add the new pic data to tmpPics
